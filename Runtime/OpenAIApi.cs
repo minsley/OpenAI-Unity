@@ -165,6 +165,18 @@ namespace OpenAI
         }
         
         /// <summary>
+        ///     Creates a chat completion for the provided prompt and parameters.
+        /// </summary>
+        /// <param name="request">See <see cref="CreateChatCompletionRequest"/></param>
+        /// <returns>See <see cref="CreateChatCompletionResponse"/></returns>
+        public async Task<CreateChatCompletionResponse> CreateChatCompletion(CreateChatCompletionRequest request)
+        {
+            var path = $"{BASE_PATH}/chat/completions";
+            var payload = CreatePayload(request);
+            return await DispatchRequest<CreateChatCompletionResponse>(path, UnityWebRequest.kHttpVerbPOST, payload);
+        }
+        
+        /// <summary>
         ///     Creates a new edit for the provided input, instruction, and parameters.
         /// </summary>
         /// <param name="request">See <see cref="CreateEditRequest"/></param>

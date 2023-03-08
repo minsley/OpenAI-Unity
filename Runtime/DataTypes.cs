@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -14,9 +15,9 @@ namespace OpenAI
 
     public struct Usage
     {
-        public string PromptTokens { get; set; }
-        public string CompletionTokens { get; set; }
-        public string TotalTokens { get; set; }
+        public int PromptTokens { get; set; }
+        public int CompletionTokens { get; set; }
+        public int TotalTokens { get; set; }
     }
     
     public class OpenAIFile
@@ -74,6 +75,48 @@ namespace OpenAI
     public class OpenAIModelResponse : OpenAIModel, IResponse
     {
         public ApiError Error { get; set; }
+    }
+    #endregion
+
+    #region Chat Completions API Data Types
+    public sealed class CreateChatCompletionRequest
+    {
+        public string Model { get; set; }
+        public CreateChatCompletionMessage[] Messages { get; set; } = Array.Empty<CreateChatCompletionMessage>();
+        public float? Temperature { get; set; } = 1;
+        public float? TopP { get; set; } = 1;
+        public int? N { get; set; } = 1;
+        public bool? Stream { get; set; } = false;
+        public string Stop { get; set; }
+        public int? MaxTokens { get; set; } = 16;
+        public float? PresencePenalty { get; set; } = 0;
+        public float? FrequencyPenalty { get; set; } = 0;
+        public Dictionary<string, string> LogitBias { get; set; }
+        public string User { get; set; }
+    }
+    
+    public struct CreateChatCompletionMessage
+    {
+        public string Role { get; set; }    // "system", "user", or "assistant"
+        public string Content { get; set; }
+    }
+
+    public struct CreateChatCompletionResponse: IResponse
+    {
+        public ApiError Error { get; set; }
+        public string Id { get; set; }
+        public string Object { get; set; }
+        public long Created { get; set; }
+        public string Model { get; set; }
+        public Usage Usage { get; set; }
+        public List<ChatChoice> Choices { get; set; }
+    }
+
+    public struct ChatChoice
+    {
+        public CreateChatCompletionMessage Message { get; set; }
+        public int? Index { get; set; }
+        public string FinishReason { get; set; }    // "stop", "length", "content_filter", or "null"
     }
     #endregion
 
